@@ -8,6 +8,7 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Definition for a binary tree node.
@@ -25,17 +26,27 @@ import java.util.List;
  * }
  */
 class Solution {
-    private void preorderTraversal(TreeNode root, List<Integer> lst) {
-        if (root == null)
-            return;
-        lst.add(root.val);
-        preorderTraversal(root.left, lst);
-        preorderTraversal(root.right, lst);
-    }
-
     public List<Integer> preorderTraversal(TreeNode root) {
         List<Integer> lst = new ArrayList<>();
-        preorderTraversal(root, lst);
+        if (root == null) {
+            return lst;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.empty()) {
+            TreeNode node = stack.pop();
+            if (node != null) {
+                if (node.right != null)
+                    stack.push(node.right);
+                if (node.left != null)
+                    stack.push(node.left);
+                stack.push(node);
+                stack.push(null);
+            } else {
+                node = stack.pop();
+                lst.add(node.val);
+            }
+        }
         return lst;
     }
 }
