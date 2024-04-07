@@ -8,6 +8,7 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Definition for a binary tree node.
@@ -25,26 +26,36 @@ import java.util.List;
  * }
  */
 class Solution {
+    private static class Context {
+        TreeNode node;
+        String prefix;
+        public Context(TreeNode node, String prefix) {
+            this.node = node;
+            this.prefix = prefix;
+        }
+    }
     public List<String> binaryTreePaths(TreeNode root) {
-        List<String> path = new ArrayList<>();
-        if (root == null)
-            return path;
-        if (root.left == null && root.right == null) {
-            return List.of(String.valueOf(root.val));
-        }
-        if (root.left != null) {
-            List<String> leftPath = binaryTreePaths(root.left);
-            for (String p : leftPath) {
-                path.add(root.val + "->" + p);
+        Stack<Context> stack = new Stack<>();
+        List<String> results = new ArrayList<>();
+        if (root.left == null && root.right == null) return List.of(String.valueOf(root.val));
+        if (root.right != null) stack.push(new Context(root.right, String.valueOf(root.val)));
+        if (root.left != null) stack.push(new Context(root.left, String.valueOf(root.val)));
+        while (!stack.empty()) {
+            Context ctx = stack.pop();
+            if (ctx != null) {
+                TreeNode node = ctx.node; String prefix = ctx.prefix + "->" + String.valueOf(node.val);
+                if (node.right != null) stack.push(new Context(node.right, prefix));
+                if (node.left != null) stack.push(new Context(node.left, prefix));
+                stack.push(ctx); stack.push(null);
+            } else {
+                ctx = stack.pop();
+                TreeNode node = ctx.node; String prefix = ctx.prefix + "->" + String.valueOf(node.val);
+                if (node.left == null && node.right == null) {
+                    results.add(prefix);
+                }
             }
         }
-        if (root.right != null) {
-            List<String> rightPath = binaryTreePaths(root.right);
-            for (String p : rightPath) {
-                path.add(root.val + "->" + p);
-            }
-        }
-        return path;
+        return results;
     }
 }
 // @lc code=end
