@@ -29,21 +29,9 @@ class Solution {
     public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
         if (root1 == null) return root2;
         if (root2 == null) return root1;
-        Queue<TreeNode> queue = new ArrayDeque<>();
-        queue.add(root1); queue.add(root2);
-        while (!queue.isEmpty()) {
-            TreeNode n1 = queue.remove();
-            TreeNode n2 = queue.remove();
-            n1.val += n2.val;
-            if (n1.left == null) n1.left = n2.left;
-            else if (n1.left != null && n2.left != null) {
-                queue.add(n1.left); queue.add(n2.left);
-            }
-            if (n1.right == null) n1.right = n2.right;
-            else if (n1.right != null && n2.right != null) {
-                queue.add(n1.right); queue.add(n2.right);
-            }
-        }
+        root1.val += root2.val;
+        root1.left = mergeTrees(root1.left, root2.left);
+        root1.right = mergeTrees(root1.right, root2.right);
         return root1;
     }
 }
