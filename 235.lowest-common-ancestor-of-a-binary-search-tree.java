@@ -6,8 +6,6 @@
 
 // @lc code=start
 
-import java.util.Stack;
-
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -21,20 +19,10 @@ import java.util.Stack;
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         int min = Math.min(p.val, q.val), max = Math.max(p.val, q.val);
-        Stack<TreeNode> stack = new Stack<>();
-        stack.push(root);
-        while (!stack.empty()) {
-            TreeNode node = stack.pop();
-            if (node != null) {
-                if (node.right != null) stack.push(node.right);
-                if (node.left != null) stack.push(node.left);
-                stack.push(node); stack.push(null);
-            } else {
-                node = stack.pop();
-                if (node.val >= min && node.val <= max) return node;
-            }
-        }
-        return null;
+        if (root.val >= min && root.val <= max) return root;
+        TreeNode lres = (root.left != null) ? lowestCommonAncestor(root.left, p, q) : null;
+        TreeNode rres = (root.right != null) ? lowestCommonAncestor(root.right, p, q) : null;
+        return (lres == null) ? rres : lres;
     }
 }
 // @lc code=end
