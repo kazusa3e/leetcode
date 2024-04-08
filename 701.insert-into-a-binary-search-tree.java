@@ -23,8 +23,16 @@
 class Solution {
     public TreeNode insertIntoBST(TreeNode root, int val) {
         if (root == null) return new TreeNode(val);
-        if (val < root.val) root.left = insertIntoBST(root.left, val);
-        if (val > root.val) root.right = insertIntoBST(root.right, val);
+        TreeNode parent = null, iter = root;
+        while (iter != null) {
+            if (val < iter.val) {
+                parent = iter; iter = iter.left;
+            } else if (val > iter.val) {
+                parent = iter; iter = iter.right;
+            }
+        }
+        if (val < parent.val) parent.left = new TreeNode(val);
+        if (val > parent.val) parent.right = new TreeNode(val);
         return root;
     }
 }
