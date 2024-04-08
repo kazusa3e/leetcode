@@ -20,41 +20,19 @@ import java.util.Stack;
  * }
  */
 class Solution {
-    private static class Context {
-        TreeNode node;
-        List<TreeNode> prefix;
-        public Context(TreeNode node, List<TreeNode> prefix) {
-            this.node = node;
-            this.prefix = prefix;
-        }
-    }
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        List<TreeNode> ppath = null, qpath = null;
-        Stack<Context> stack = new Stack<>();
-        stack.push(new Context(root, new ArrayList<>()));
-        while (!stack.empty()) {
-            Context ctx = stack.pop();
-            if (ctx != null) {
-                TreeNode node = ctx.node; List<TreeNode> prefix = new ArrayList<>(ctx.prefix);
-                prefix.add(node);
-                if (node.right != null) stack.push(new Context(node.right, prefix));
-                if (node.left != null) stack.push(new Context(node.left, prefix));
-                stack.push(ctx); stack.push(null);
-            } else {
-                ctx = stack.pop();
-                TreeNode node = ctx.node; List<TreeNode> prefix = new ArrayList<>(ctx.prefix);
-                prefix.add(node);
-                if (node.val == p.val) ppath = prefix;
-                if (node.val == q.val) qpath = prefix;
-            }
-        }
-        TreeNode iter = null;
-        for (int ix = 0; ix != Math.min(ppath.size(), qpath.size()); ++ix) {
-            if (ppath.get(ix).val == qpath.get(ix).val) {
-                iter = ppath.get(ix);
-            } else break;
-        }
-        return iter;
+        if (root == null) return null;
+        if (root.val == p.val) return p;
+        if (root.val == q.val) return q;
+        if (root.left == null && root.right == null) return null;
+        if (root.left == null) return lowestCommonAncestor(root.right, p, q);
+        if (root.right == null) return lowestCommonAncestor(root.left, p, q);
+        TreeNode lres = lowestCommonAncestor(root.left, p, q);
+        TreeNode rres = lowestCommonAncestor(root.right, p, q);
+        if (lres != null && rres != null) return root;
+        if (lres == null ^ rres == null)
+            return (lres == null) ? rres : lres;
+        return null;
     }
 }
 // @lc code=end
