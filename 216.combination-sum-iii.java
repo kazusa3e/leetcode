@@ -26,6 +26,7 @@ class Solution {
             return;
         }
         if (startIndex + (k - path.size()) > 10) return;
+        if (path.stream().mapToInt(x -> x).sum() >= n) return;
         for (int i = startIndex; i != 10; ++i) {
             path.add(i);
             backtracking(k, n, i + 1);
