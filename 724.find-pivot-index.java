@@ -13,18 +13,14 @@ class Solution {
         if (nums.length == 1) {
             return 0;
         }
-        int l = 0;
-        long lsum = 0, rsum = Arrays.stream(nums).sum() - nums[0];
-        while (l != nums.length && lsum != rsum) {
-            lsum += nums[l];
-            l += 1;
-            if (l != nums.length) {
-                rsum -= nums[l];
-            }
+        int sum = Arrays.stream(nums).sum();
+        int acc = 0;
+        int ix = 0;
+        while (ix != nums.length) {
+            if (acc * 2 + nums[ix] == sum) break;
+            acc += nums[ix++];
         }
-        if (l == nums.length)
-            return -1;
-        return (lsum == rsum) ? l : -1;
+        return (ix == nums.length) ? -1 : ix;
     }
 }
 // @lc code=end
