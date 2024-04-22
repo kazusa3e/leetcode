@@ -5,20 +5,23 @@
  */
 
 // @lc code=start
-
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 class Solution {
     public void rotate(int[] nums, int k) {
-        Deque<Integer> deque = new ArrayDeque<>();
-        for (int n : nums)
-            deque.add(n);
-        for (int ix = 0; ix != k; ++ix) {
-            deque.addFirst(deque.removeLast());
-        }
-        for (int ix = 0; ix != nums.length; ++ix) {
-            nums[ix] = deque.removeFirst();
+        if (k == nums.length) return;
+        if (k > nums.length) k = k % nums.length;
+        reverse(nums, 0, nums.length);
+        reverse(nums, 0, k);
+        reverse(nums, k, nums.length);
+    }
+
+    private void reverse(int[] nums, int start, int end) {
+        end -= 1;
+        while (start < end) {
+            int tmp = nums[start];
+            nums[start] = nums[end];
+            nums[end] = tmp;
+            start += 1;
+            end -= 1;
         }
     }
 }
