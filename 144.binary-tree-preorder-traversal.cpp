@@ -18,7 +18,7 @@
  */
 
 #include <vector>
-#include <utility>
+#include <stack>
 
 using namespace std;
 
@@ -26,14 +26,17 @@ class Solution {
 public:
     vector<int> preorderTraversal(TreeNode* root) {
         vector<int> ret;
-        preorderTraversal(root, move(ret));
+        if (root == nullptr) return ret;
+        stack<TreeNode *> st;
+        st.push(root);
+        while (!st.empty()) {
+            TreeNode *top = st.top();
+            st.pop();
+            ret.push_back(top->val);
+            if (top->right != nullptr) { st.push(top->right); }
+            if (top->left != nullptr) { st.push(top->left); }
+        }
         return ret;
-    }
-    void preorderTraversal(TreeNode *root, vector<int> &&v) {
-        if (root == nullptr) return;
-        v.push_back(root->val);
-        preorderTraversal(root->left, move(v));
-        preorderTraversal(root->right, move(v));
     }
 };
 // @lc code=end

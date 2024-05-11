@@ -18,22 +18,27 @@
  */
 
 #include <vector>
+#include <stack>
 
 using namespace std;
 
 class Solution {
 public:
     vector<int> postorderTraversal(TreeNode* root) {
-        vector<int> ret;
-        postorderTraversal(root, move(ret));
-        return ret;
+       vector<int> ret;
+       if (root == nullptr) return ret;
+       stack<TreeNode *> st;
+       st.push(root);
+       while (!st.empty()) {
+            TreeNode *top = st.top();
+            st.pop();
+            ret.push_back(top->val);
+            if (top->left != nullptr) st.push(top->left);
+            if (top->right != nullptr) st.push(top->right);
+       }
+       reverse(ret.begin(), ret.end());
+       return ret;
     }
 
-    void postorderTraversal(TreeNode *root, vector<int> &&v) {
-        if (root == nullptr) return;
-        postorderTraversal(root->left, move(v));
-        postorderTraversal(root->right, move(v));
-        v.push_back(root->val);
-    }
 };
 // @lc code=end
