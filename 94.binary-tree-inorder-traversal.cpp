@@ -18,6 +18,7 @@
  */
 
 #include <vector>
+#include <stack>
 
 using namespace std;
 
@@ -25,15 +26,23 @@ class Solution {
 public:
     vector<int> inorderTraversal(TreeNode* root) {
         vector<int> ret;
-        inorderTraversal(root, move(ret));
+        if (root == nullptr) return ret;
+        stack<TreeNode *> st;
+        st.push(root);
+        while (!st.empty()) {
+            TreeNode *node = st.top();
+            st.pop();
+            if (node != nullptr) {
+                if (node->right != nullptr) st.push(node->right);
+                st.push(node); st.push(nullptr);
+                if (node->left != nullptr) st.push(node->left);
+            } else {
+                node = st.top();
+                st.pop();
+                ret.push_back(node->val);
+            }
+        }
         return ret;
-    }
-
-    void inorderTraversal(TreeNode *root, vector<int> &&v) {
-        if (root == nullptr) return;
-        inorderTraversal(root->left, move(v));
-        v.push_back(root->val);
-        inorderTraversal(root->right, move(v));
     }
 };
 // @lc code=end

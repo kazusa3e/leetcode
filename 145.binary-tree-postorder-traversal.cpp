@@ -30,13 +30,18 @@ public:
        stack<TreeNode *> st;
        st.push(root);
        while (!st.empty()) {
-            TreeNode *top = st.top();
+            TreeNode *node = st.top();
             st.pop();
-            ret.push_back(top->val);
-            if (top->left != nullptr) st.push(top->left);
-            if (top->right != nullptr) st.push(top->right);
+            if (node != nullptr) {
+                st.push(node); st.push(nullptr);
+                if (node->right != nullptr) st.push(node->right);
+                if (node->left != nullptr) st.push(node->left);
+            } else {
+                node = st.top();
+                st.pop();
+                ret.push_back(node->val);
+            }
        }
-       reverse(ret.begin(), ret.end());
        return ret;
     }
 
