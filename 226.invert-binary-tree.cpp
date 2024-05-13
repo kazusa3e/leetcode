@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <queue>
 
 using namespace std;
 
@@ -25,9 +26,17 @@ class Solution {
 public:
     TreeNode* invertTree(TreeNode* root) {
         if (root == nullptr) return nullptr;
-        swap(root->left, root->right);
-        if (root->left) root->left = invertTree(root->left);
-        if (root->right) root->right = invertTree(root->right);
+        queue<TreeNode *> q;
+        q.push(root);
+        while (!q.empty()) {
+            for (int sz = q.size(); sz != 0; --sz) {
+                TreeNode *node = q.front();
+                q.pop();
+                swap(node->left, node->right);
+                if (node->left != nullptr) q.push(node->left);
+                if (node->right != nullptr) q.push(node->right);
+            }
+        }
         return root;
     }
 };
