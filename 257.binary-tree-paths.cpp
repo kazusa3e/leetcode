@@ -19,6 +19,7 @@
 
 #include <string>
 #include <vector>
+#include <stack>
 
 using namespace std;
 
@@ -26,20 +27,24 @@ class Solution {
 public:
     vector<string> binaryTreePaths(TreeNode* root) {
         if (root == nullptr) return {};
+        stack<TreeNode *> nodeSt;
+        stack<string> prefixSt;
         vector<string> ret;
-        binaryTreePaths(root, "", move(ret));
+        nodeSt.push(root); prefixSt.push("");
+        while (!nodeSt.empty()) {
+            TreeNode *node = nodeSt.top(); nodeSt.pop();
+            string prefix = prefixSt.top(); prefixSt.pop();
+            if (node->left == nullptr && node->right == nullptr) {
+                ret.push_back(prefix + to_string(node->val));
+            }
+            if (node->left != nullptr) {
+                nodeSt.push(node->left); prefixSt.push(prefix + to_string(node->val) + "->");
+            }
+            if (node->right != nullptr) {
+                nodeSt.push(node->right); prefixSt.push(prefix + to_string(node->val) + "->");
+            }
+        }
         return ret;
-    }
-    void binaryTreePaths(TreeNode *root, const string prefix, vector<string> &&ret) {
-        if (root->left == nullptr && root->right == nullptr) {
-            ret.push_back(prefix + to_string(root->val));
-        }
-        if (root->left != nullptr) {
-            binaryTreePaths(root->left, prefix + to_string(root->val) + "->", move(ret));
-        }
-        if (root->right != nullptr) {
-            binaryTreePaths(root->right, prefix + to_string(root->val) + "->", move(ret));
-        }
     }
 };
 // @lc code=end
