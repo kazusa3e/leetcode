@@ -17,7 +17,6 @@
  * };
  */
 
-#include <deque>
 #include <queue>
 
 using namespace std;
@@ -26,13 +25,18 @@ class Solution {
 public:
     bool isSymmetric(TreeNode *root) {
         if (root == nullptr) return true;
-        return compare(root->left, root->right);
-    }
-    bool compare(TreeNode *left, TreeNode *right) {
-        if (left == nullptr && right == nullptr) return true;
-        if (left == nullptr ^ right == nullptr) return false;
-        if (left->val != right->val) return false;
-        return compare(left->left, right->right) && compare(left->right, right->left);
+        queue<TreeNode *> q;
+        q.push(root->left); q.push(root->right);
+        while (!q.empty()) {
+            TreeNode *left = q.front(); q.pop();
+            TreeNode *right = q.front(); q.pop();
+            if (left == nullptr && right == nullptr) continue;
+            if (left == nullptr ^ right == nullptr) return false;
+            if (left->val != right->val) return false;
+            q.push(left->left); q.push(right->right);
+            q.push(left->right); q.push(right->left);
+        }
+        return true;
     }
 };
 // @lc code=end
