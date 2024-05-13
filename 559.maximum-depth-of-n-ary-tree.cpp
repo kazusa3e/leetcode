@@ -27,6 +27,7 @@ public:
 
 #include <vector>
 #include <algorithm>
+#include <queue>
 
 using namespace std;
 
@@ -34,15 +35,20 @@ class Solution {
 public:
     int maxDepth(Node* root) {
         if (root == nullptr) return 0;
-        vector<Node *> children = root->children;
-        vector<int> depths;
-        transform(
-            children.begin(), children.end(),
-            back_inserter(depths),
-            [&](Node *node) { return maxDepth(node); }
-        );
-        if (depths.size() == 0) return 1;
-        return 1 + *max_element(depths.begin(), depths.end());
+        queue<Node *> qu;
+        qu.push(root);
+        int depth = 0;
+        while (!qu.empty()) {
+            depth += 1;
+            for (int sz = qu.size(); sz != 0; --sz) {
+                Node *node = qu.front(); qu.pop();
+                vector<Node *> children = node->children;
+                for_each(children.begin(), children.end(), [&qu](Node *n) {
+                    qu.push(n);
+                });
+            }
+        }
+        return depth;
     }
 };
 // @lc code=end
