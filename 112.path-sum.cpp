@@ -26,14 +26,13 @@ public:
         if (root->left == nullptr && root->right == nullptr) {
             if (root->val + preSum == targetSum) return true;
         }
-        bool l = false, r = false;
         if (root->left != nullptr) {
-            l = hasPathSum(root->left, targetSum, preSum + root->val);
+            if (hasPathSum(root->left, targetSum, preSum + root->val)) return true;
         }
         if (root->right != nullptr) {
-            r = hasPathSum(root->right, targetSum, preSum + root->val);
+            if (hasPathSum(root->right, targetSum, preSum + root->val)) return true;
         }
-        return l || r;
+        return false;
     }
 };
 // @lc code=end
