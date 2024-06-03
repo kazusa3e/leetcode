@@ -14,8 +14,14 @@ using namespace std;
 class Solution {
 public:
     int majorityElement(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        return nums[nums.size() / 2];
+        unsigned count = 0;
+        int candidate = nums[0];
+        for (auto iter = nums.begin(); iter != nums.end(); ++iter) {
+            if (count == 0) candidate = *iter;
+            if (*iter == candidate) count += 1;
+            else count -= 1;
+        }
+        return candidate;
     }
 };
 // @lc code=end
