@@ -13,15 +13,14 @@ class Solution {
 public:
     int search(vector<int>& nums, int target) {
         if (nums.size() == 1) {
-            return (nums.at(0) == target) ? 0 : -1;
+            return (nums[0] == target) ? 0 : -1;
         }
-        using size_type = decltype(nums.size());
-        size_type left = 0, right = nums.size();
-        while (left < right) {
-            size_type mid = ((right - left) >> 1) + left;
-            if (target < nums.at(mid)) {
-                right = mid;
-            } else if (target > nums.at(mid)) {
+        long left = 0, right = nums.size() - 1;
+        while (left <= right) {
+            long mid = left + ((right - left) >> 1);
+            if (target < nums[mid]) {
+                right = mid - 1;
+            } else if (target > nums[mid]) {
                 left = mid + 1;
             } else {
                 return mid;
