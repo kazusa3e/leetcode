@@ -13,8 +13,7 @@
 using namespace std;
 
 class Solution {
-public:
-
+private:
     unordered_map<char, vector<char>> keymappings = {
         {'2', {'a', 'b', 'c'}},
         {'3', {'d', 'e', 'f'}},
@@ -26,26 +25,33 @@ public:
         {'9', {'w', 'x', 'y', 'z'}},
     };
 
-    vector<string> results;
-    vector<char> bag;
+    string digits_;
+    vector<string> results_;
+    vector<char> bag_;
 
-    vector<string> letterCombinations(string digits) {
-        if (digits == "") return {};
-        backtracking(digits);
-        return results;
-    }
-
-    void backtracking(string digits) {
-        if (digits == "") {
-            results.push_back({bag.begin(), bag.end()});
+    void backtracking(string::iterator begin) {
+        if (begin == digits_.end()) {
+            if (bag_.size() == digits_.size()) {
+                results_.push_back(string {bag_.begin(), bag_.end()});
+            }
             return;
         }
-        auto letters = keymappings[digits[0]];
-        for (auto ch : letters) {
-            bag.push_back(ch);
-            backtracking({digits.begin() + 1, digits.end()});
-            bag.pop_back();
+        for (auto iter = begin; iter != digits_.end(); ++iter) {
+            for (auto ch : keymappings[*iter]) {
+                bag_.push_back(ch);
+                backtracking(iter + 1);
+                bag_.pop_back();
+            }
         }
     }
+
+public:
+    vector<string> letterCombinations(string digits) {
+        if (digits == "") return {};
+        digits_ = digits;
+        backtracking(digits_.begin());
+        return results_;
+    }
+
 };
 // @lc code=end
