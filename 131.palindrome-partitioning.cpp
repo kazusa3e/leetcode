@@ -19,27 +19,26 @@ bool isPalindrome(const string::iterator &begin, const string::iterator &end) {
 
 class Solution {
 private:
-    vector<vector<string>> results_;
-    vector<string> bag_;
     string s_;
-
-    void backtracking(string::iterator pos) {
-        if (pos == s_.end()) {
+    vector<string> bag_;
+    vector<vector<string>> results_;
+    void backtracking(string::iterator left, string::iterator right) {
+        if (left == s_.end()) {
             results_.push_back(bag_);
             return;
         }
-        for (auto iter = pos + 1; iter <= s_.end(); ++iter) {
-            if (!isPalindrome(pos, iter)) continue;
-            bag_.push_back({pos, iter});
-            backtracking(iter);
-            bag_.pop_back();
+        for (auto iter = right; iter <= s_.end(); ++iter) {
+            if (isPalindrome(left, iter)) {
+                bag_.push_back(string {left, iter});
+                backtracking(iter, iter + 1);
+                bag_.pop_back();
+            }
         }
     }
-
 public:
     vector<vector<string>> partition(string s) {
         s_ = s;
-        backtracking(s_.begin());
+        backtracking(s_.begin(), s_.begin() + 1);
         return results_;
     }
 };
