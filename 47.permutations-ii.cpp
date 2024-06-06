@@ -13,26 +13,27 @@ using namespace std;
 
 class Solution {
 private:
+    vector<int> bag_;
     vector<vector<int>> results_;
-
-    void backtracking(vector<int> bag, vector<int> collections) {
-        if (collections.empty()) {
-            results_.push_back(bag);
+    void backtracking(vector<int> candidates) {
+        if (candidates.empty()) {
+            results_.push_back(bag_);
+            return;
         }
         unordered_set<int> seen;
-        for (auto iter = collections.begin(); iter != collections.end(); ++iter) {
+        for (auto iter = candidates.begin(); iter != candidates.end(); ++iter) {
             if (auto pos = seen.find(*iter); pos != seen.end()) continue;
             seen.insert(*iter);
-            vector<int> b {bag}, c {collections};
-            b.push_back(*iter);
-            c.erase(c.begin() + (iter - collections.begin()));
-            backtracking(b, c);
+            bag_.push_back(*iter);
+            vector<int> c {candidates};
+            c.erase(c.begin() + distance(candidates.begin(), iter));
+            backtracking(c);
+            bag_.pop_back();
         }
     }
-
 public:
     vector<vector<int>> permuteUnique(vector<int>& nums) {
-        backtracking({}, nums);
+        backtracking(nums);
         return results_;
     }
 };
