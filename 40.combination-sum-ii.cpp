@@ -15,37 +15,39 @@ using namespace std;
 
 class Solution {
 private:
-    vector<vector<int>> results_;
-    vector<int> bag_;
     vector<int> candidates_;
     int target_;
-
-public:
-
-    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
-        candidates_ = candidates;
-        sort(candidates_.begin(), candidates_.end());
-        target_ = target;
-
-        backtracking(candidates_.begin());
-        return results_;
-    }
+    vector<vector<int>> results_;
+    vector<int> bag_;
+    int sum_ {};
 
     void backtracking(vector<int>::iterator begin) {
-        auto sum = accumulate(bag_.begin(), bag_.end(), 0);
-        if (sum > target_) return;
-        if (sum == target_) {
+        if (sum_ == target_) {
             results_.push_back(bag_);
             return;
         }
-        unordered_set<int> used;
+        if (sum_ > target_) return;
+        if (begin == candidates_.end()) return;
+        unordered_set<int> seen;
         for (auto iter = begin; iter != candidates_.end(); ++iter) {
-            if (auto pos = used.find(*iter); pos != used.end()) continue;
-            used.insert(*iter);
+            if (auto pos = seen.find(*iter); pos != seen.end()) {
+                continue;
+            }
+            seen.insert(*iter);
             bag_.push_back(*iter);
+            sum_ += *iter;
             backtracking(iter + 1);
             bag_.pop_back();
+            sum_ -= *iter;
         }
+    }
+public:
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        candidates_ = candidates;
+        target_ = target;
+        sort(candidates_.begin(), candidates_.end());
+        backtracking(candidates_.begin());
+        return results_;
     }
 };
 // @lc code=end
