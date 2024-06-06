@@ -13,38 +13,33 @@
 using namespace std;
 
 class Solution {
-public:
-
-    vector<vector<int>> results;
-    vector<int> bag;
-
-    vector<int> candicates_;
+private:
+    vector<int> candidates_;
     int target_;
-
-    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        candicates_ = candidates;
-        sort(candicates_.begin(), candicates_.end());
-        target_ = target;
-
-        backtracking(candicates_.begin());
-
-        return results;
-    }
-
-    void backtracking(const vector<int>::iterator &begin) {
-        auto sum = accumulate(bag.begin(), bag.end(), 0);
-        if (sum == target_) {
-            results.push_back(bag);
+    vector<vector<int>> results_;
+    vector<int> bag_;
+    int sum_ {};
+    void backtracking(vector<int>::iterator begin) {
+        if (sum_ == target_) {
+            results_.push_back(bag_);
             return;
         }
-        if (sum > target_) {
-            return;
-        }
-        for (auto iter = begin; iter != candicates_.end(); ++iter) {
-            bag.push_back(*iter);
+        if (sum_ > target_) return;
+        for (auto iter = begin; iter != candidates_.end(); ++iter) {
+            bag_.push_back(*iter);
+            sum_ += *iter;
             backtracking(iter);
-            bag.pop_back();
+            bag_.pop_back();
+            sum_ -= *iter;
         }
     }
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        candidates_ = candidates;
+        target_ = target;
+        backtracking(candidates_.begin());
+        return results_;
+    }
+
 };
 // @lc code=end
