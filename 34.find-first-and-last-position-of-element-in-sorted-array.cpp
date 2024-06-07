@@ -7,6 +7,8 @@
 // @lc code=start
 
 #include <vector>
+#include <algorithm>
+
 using namespace std;
 
 class Solution {
@@ -18,33 +20,14 @@ public:
         if (target < nums.front() || target > nums.back()) {
             return {-1, -1};
         }
-        using size_type = decltype(nums.size());
-        size_type idx = 0;
-        bool found = false;
-        size_type left = 0, right = nums.size();
-        while (left < right) {
-            size_type mid = left + ((right - left) >> 1);
-            if (target < nums.at(mid)) {
-                right = mid;
-            } else if (target > nums.at(mid)) {
-                left = mid + 1;
-            } else {
-                found = true;
-                idx = mid;
-                break;
-            }
-        }
-        if (!found) {
+        auto left = lower_bound(nums.begin(), nums.end(), target);
+        auto right = upper_bound(nums.begin(), nums.end(), target) - 1;
+        if (*left == target) {
+            return {static_cast<int>(distance(nums.begin(), left)), static_cast<int>(distance(nums.begin(), right)) };
+        } else {
             return {-1, -1};
         }
-        left = right = idx;
-        while (left > 0 && nums.at(left - 1) == target) {
-            left -= 1;
-        }
-        while (right < nums.size() - 1 && nums.at(right + 1) == target) {
-            right += 1;
-        }
-        return {static_cast<int>(left), static_cast<int>(right)};
+
     }
 };
 // @lc code=end
