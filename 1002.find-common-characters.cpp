@@ -6,11 +6,11 @@
 
 // @lc code=start
 
-#include <vector>
-#include <string>
 #include <algorithm>
 #include <array>
 #include <numeric>
+#include <string>
+#include <vector>
 #include <limits>
 
 using namespace std;
@@ -18,28 +18,27 @@ using namespace std;
 class Solution {
 public:
     vector<string> commonChars(vector<string>& words) {
-        using record_t = array<unsigned, 26>;
-        vector<record_t> records;
-        transform(words.begin(), words.end(), back_inserter(records), [](const string &s) {
-            record_t r {};
-            for_each(s.begin(), s.end(), [&r](char ch) {
-                r[ch - 'a'] += 1;
-            });
-            return r;
+        using container_t = array<unsigned, 26>;
+        vector<container_t> stats;
+        transform(words.begin(), words.end(), back_inserter(stats), [&](const string& s) {
+            container_t container = {0};
+            for_each(s.begin(), s.end(), [&](char ch) { container[ch - 'a'] += 1; });
+            return container;
         });
-        record_t initial {};
+        container_t initial;
         initial.fill(numeric_limits<unsigned>::max());
-        record_t common = accumulate(records.begin(), records.end(), initial, [](const record_t &acc, const record_t &r) {
-            record_t ret {};
-            transform(acc.begin(), acc.end(), r.begin(), ret.begin(), [](unsigned a, unsigned b) {
+        container_t res = accumulate(stats.begin(), stats.end(), initial, [](const container_t &acc, const container_t &curr) {
+            container_t m = {0};
+            transform(acc.begin(), acc.end(), curr.begin(), m.begin(), [](unsigned a, unsigned b) {
                 return min(a, b);
             });
-            return ret;
+            return m;
         });
         vector<string> ret;
-        for (unsigned ix = 0; ix != 26; ++ix) {
-            if (common[ix] != 0) {
-                fill_n(back_inserter(ret), common[ix], string (1, 'a' + ix));
+        for (auto ix = 0; ix != res.size(); ++ix) {
+            while (res[ix] != 0) {
+                ret.push_back(string(1, static_cast<char>('a' + ix)));
+                res[ix] -= 1;
             }
         }
         return ret;
