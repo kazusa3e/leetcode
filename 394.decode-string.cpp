@@ -36,11 +36,7 @@ public:
                     tmp += p;
                     t -= 1;
                 }
-                if (!patterns.empty()) {
-                    patterns.top() += tmp;
-                } else {
-                    patterns.push(tmp);
-                }
+                patterns.top() += tmp;
             } else if (isalpha(*iter)) {
                 patterns.top() += *iter;
             } else {
