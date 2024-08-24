@@ -6,6 +6,7 @@
 
 // @lc code=start
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -14,18 +15,29 @@ public:
     int strStr(string haystack, string needle) {
         if (needle.size() == 0) return 0;
         if (haystack.size() < needle.size()) return -1;
-        auto start_pos = haystack.begin();
-        auto i = start_pos, j = needle.begin();
-        while (j != needle.end()) {
-            if (*i == *j) {
+        auto next = evaluate_next(needle);
+        unsigned i = 0, j = 0;
+        while (true) {
+            if (j == needle.size()) return i - j;
+            if (i == haystack.size()) return -1;
+            if (haystack[i] == needle[j]) {
                 i += 1; j += 1;
             } else {
-                start_pos += 1;
-                if (start_pos > haystack.end() - needle.size()) return -1;
-                i = start_pos; j = needle.begin();
+                (j == 0) ? i += 1 : j = next[j - 1];
             }
         }
-        return start_pos - haystack.begin();
+        return -1;
+    }
+
+    vector<unsigned> evaluate_next(const string &pattern) {
+        vector<unsigned> ret(pattern.size(), 0);
+        unsigned j = 0;
+        for (unsigned i = 1; i != pattern.size(); ++i) {
+            while (j != 0 && pattern[i] != pattern[j]) j = ret[j - 1];
+            if (pattern[i] == pattern[j]) j += 1;
+            ret[i] = j;
+        }
+        return ret;
     }
 };
 // @lc code=end
