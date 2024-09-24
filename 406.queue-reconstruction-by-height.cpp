@@ -8,6 +8,8 @@
 
 #include <iostream>
 #include <vector>
+#include <list>
+#include <algorithm>
 
 using namespace std;
 
@@ -20,11 +22,16 @@ public:
             else if (v1[1] < v2[1]) return true;
             return false;
         });
-        vector<vector<int>> ret;
+        list<vector<int>> que;
         for (const auto &el : people) {
-            ret.insert(ret.begin() + el[1], el);
+            int pos = el[1];
+            auto iter = que.begin();
+            while (pos != 0) {
+                ++iter; pos -= 1;
+            }
+            que.insert(iter, el);
         }
-        return ret;
+        return vector<vector<int>> {que.begin(), que.end()};
     }
 };
 // @lc code=end
