@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <limits>
 
 using namespace std;
 
@@ -15,30 +16,23 @@ class Solution {
 public:
     int findUnsortedSubarray(vector<int>& nums) {
         if (nums.size() == 1) return 0;
-        int left_pos = -1, right_pos = -1;
-        for (int ix = 1; ix != nums.size(); ++ix) {
-            if (nums[ix - 1] > nums[ix]) {
-                left_pos = ix - 1; break;
-            }
-        }
-        for (int ix = nums.size() - 2; ix >= 0; --ix) {
-            if (nums[ix] > nums[ix + 1]) {
-                right_pos = ix + 1; break;
-            }
-        }
-        if (left_pos == -1 || right_pos == -1) return 0;
+        int m_min = numeric_limits<int>::max(),
+            m_max = numeric_limits<int>::min();
 
-        auto min_el = min_element(nums.begin() + left_pos, nums.begin() + right_pos + 1),
-            max_el = max_element(nums.begin() + left_pos, nums.begin() + right_pos + 1);
-
-        for (int ix = right_pos + 1; ix != nums.size() && nums[ix] < *max_el; ++ix) {
-            right_pos = ix;
-        }
-        for (int ix = left_pos - 1; ix >= 0 && nums[ix] > *min_el; --ix) {
-            left_pos = ix;
+        int min_idx = -1, max_idx = -1;
+        for (int ix = 0; ix != nums.size(); ++ix) {
+            if (nums[ix] >= m_max) m_max = nums[ix];
+            else max_idx = ix;
         }
 
-        return right_pos - left_pos + 1;
+        if (max_idx == -1) return 0;
+
+        for (int ix = nums.size() - 1; ix >= 0; --ix) {
+            if (nums[ix] <= m_min) m_min = nums[ix];
+            else min_idx = ix;
+        }
+
+        return max_idx - min_idx + 1;
     }
 };
 // @lc code=end
