@@ -15,19 +15,20 @@ class Solution {
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
         sort(intervals.begin(), intervals.end(), [](const vector<int> &v1, const vector<int> &v2) {
-            return v1[0] < v2[0];
+            return less {}(v1[0], v2[0]);
         });
-        auto iter = intervals.begin();
-        while (iter < prev(intervals.end())) {
-            if ((*iter)[1] >= (*(iter + 1))[0]) {
-                (*iter)[1] = max((*iter)[1], (*(iter + 1))[1]);
-                iter = intervals.erase(iter + 1);
-                iter = prev(iter);
+        vector<vector<int>> ret;
+        vector<int> curr = intervals[0];
+        for (auto iter = intervals.begin() + 1; iter != intervals.end(); ++iter) {
+            if ((*iter)[0] <= curr[1]) {
+                curr[1] = max((*iter)[1], curr[1]);
             } else {
-                iter = iter + 1;
+                ret.push_back(curr);
+                curr = *iter;
             }
         }
-        return intervals;
+        ret.push_back(curr);
+        return ret;
     }
 };
 // @lc code=end
