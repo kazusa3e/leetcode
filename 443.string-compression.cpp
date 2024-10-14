@@ -15,18 +15,25 @@ using namespace std;
 class Solution {
 public:
     int compress(vector<char>& chars) {
+        vector<char> ret;
         auto iter = chars.begin();
         while (iter != chars.end()) {
             auto pos = find_if(iter, chars.end(), [&iter](char ch) { return ch != *iter; });
-            if (distance(iter, pos) == 1) {
-                iter = pos; continue;
+            ret.push_back(*iter);
+            auto dif = distance(iter, pos);
+            if (dif != 1) {
+                vector<char> tmp;
+                while (dif != 0) {
+                    tmp.push_back((dif % 10) + '0');
+                    dif /= 10;
+                }
+                reverse(tmp.begin(), tmp.end());
+                copy(tmp.begin(), tmp.end(), back_inserter(ret));
             }
-            auto dif = distance(iter, pos); auto s = to_string(dif);
-            copy(s.begin(), s.end(), iter + 1);
-            chars.erase(iter + s.size(), pos);
-            iter += s.size();
+            iter = pos;
         }
-        return chars.size();
+        copy(ret.begin(), ret.end(), chars.begin());
+        return ret.size();
     }
 };
 // @lc code=end
