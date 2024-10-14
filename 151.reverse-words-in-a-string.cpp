@@ -11,25 +11,23 @@
 #include <sstream>
 #include <iostream>
 #include <algorithm>
+#include <iterator>
+#include <numeric>
 
 using namespace std;
 
 class Solution {
 public:
     string reverseWords(string s) {
-        stringstream tokenizer(s);
         vector<string> tokens;
-        tokens.insert(tokens.begin(), istream_iterator<string>(tokenizer), istream_iterator<string>());
+        stringstream tokenizer {s};
+        tokens.insert(tokens.begin(), istream_iterator<string> {tokenizer}, istream_iterator<string> {});
         reverse(tokens.begin(), tokens.end());
         ostringstream oss;
-        for (auto iter = tokens.begin(); iter != tokens.end(); ++iter) {
-            if (next(iter) == tokens.end()) {
-                oss << *iter;
-            } else {
-                oss << *iter << " ";
-            }
-        }
-        return oss.str();
+        copy(tokens.begin(), tokens.end(), ostream_iterator<string>(oss, " "));
+        string ret = oss.str();
+        ret.pop_back();
+        return ret;
     }
 };
 // @lc code=end
