@@ -15,11 +15,12 @@ public:
     bool isSubsequence(string s, string t) {
         if (s.empty()) return true;
         if (t.empty()) return false;
-        auto i = s.begin();
-        for (auto iter = t.begin(); iter != t.end(); ++iter) {
-            if (*i == *iter) i += 1;
+        auto iter = s.begin();
+        for (auto i = t.begin(); i != t.end(); ++i) {
+            if (*i == *iter) ++iter;
+            if (iter == s.end()) return true;
         }
-        return i == s.end();
+        return false;
     }
 };
 // @lc code=end
