@@ -15,11 +15,11 @@ class Solution {
 public:
     int pivotIndex(vector<int>& nums) {
         if (nums.size() == 1) return 0;
-        long sum = accumulate(nums.begin(), nums.end(), 0L, plus {});
-        long acc = 0L;
-        for (auto iter = nums.begin(); iter != nums.end(); ++iter) {
-            if (acc * 2 + *iter == sum) return distance(nums.begin(), iter);
-            acc += *iter;
+        vector<int> prefix_sum(nums.size()), suffix_sum(nums.size());
+        partial_sum(nums.begin(), nums.end(), prefix_sum.begin());
+        partial_sum(nums.rbegin(), nums.rend(), suffix_sum.rbegin());
+        for (unsigned ix = 0; ix != nums.size(); ++ix) {
+            if (prefix_sum[ix] == suffix_sum[ix]) return ix;
         }
         return -1;
     }
