@@ -6,7 +6,7 @@
 
 // @lc code=start
 
-#include <algorithm>
+#include <queue>
 #include <vector>
 
 using namespace std;
@@ -14,8 +14,9 @@ using namespace std;
 class Solution {
 public:
     int findKthLargest(vector<int>& nums, int k) {
-        nth_element(nums.begin(), nums.begin() + k - 1, nums.end(), greater {});
-        return nums[k - 1];
+        priority_queue<int, vector<int>, less<int>> pq { nums.begin(), nums.end() };
+        for (; k != 1; --k) pq.pop();
+        return pq.top();
     }
 };
 // @lc code=end
