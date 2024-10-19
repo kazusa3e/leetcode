@@ -16,35 +16,33 @@ using namespace std;
 class Solution {
 public:
     string decodeString(string s) {
-        stack<unsigned> times;
-        stack<string> patterns;
-        string times_tmp;
-        string ret;
-        patterns.push("");
+        unsigned curr_times = 0;
+        string curr_pattern = "";
+        stack<unsigned> st_times;
+        stack<string> st_patterns;
         for (auto iter = s.begin(); iter != s.end(); ++iter) {
-            if (isdigit(*iter)) {
-                times_tmp += *iter;
-            } else if (*iter == '[') {
-                times.push(stoi(times_tmp));
-                times_tmp.clear();
-                patterns.push("");
-            } else if (*iter == ']') {
-                unsigned t = times.top(); times.pop();
-                string p = patterns.top(); patterns.pop();
+            if (*iter == '[') {
+                st_times.push(curr_times);
+                st_patterns.push(curr_pattern);
+                curr_times = 0;
+                curr_pattern = "";
+            }
+            else if (*iter == ']') {
+                unsigned prev_times = st_times.top();
+                string prev_pattern = st_patterns.top();
+                st_times.pop(); st_patterns.pop();
                 string tmp;
-                while (t != 0) {
-                    tmp += p;
-                    t -= 1;
-                }
-                patterns.top() += tmp;
-            } else if (isalpha(*iter)) {
-                patterns.top() += *iter;
+                while (prev_times--) { tmp += curr_pattern; }
+                curr_pattern = prev_pattern + tmp;
+            }
+            else if (isdigit(*iter)) {
+                curr_times = curr_times * 10 + (*iter - '0');
             } else {
-                throw runtime_error {"error"};
+                curr_pattern += *iter;
+                continue;
             }
         }
-        times_tmp = 1;
-        return patterns.top();
+        return curr_pattern;
     }
 };
 // @lc code=end
