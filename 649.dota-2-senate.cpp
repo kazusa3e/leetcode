@@ -8,28 +8,24 @@
 
 #include <string>
 #include <algorithm>
+#include <queue>
 
 using namespace std;
 
 class Solution {
 public:
     string predictPartyVictory(string senate) {
-        auto iter = senate.begin();
-        while (true) {
-            char opposite = (*iter == 'R') ? 'D' : 'R';
-            auto diff = distance(senate.begin(), iter);
-            if (auto rpos = find(iter + 1, senate.end(), opposite); rpos != senate.end()) {
-                senate.erase(rpos);
-                iter = senate.begin() + diff + 1;
-            } else if (auto lpos = find(senate.begin(), iter, opposite); lpos != iter) {
-                senate.erase(lpos);
-                iter = senate.begin() + diff;
-            } else {
-                return (*iter == 'R') ? "Radiant" : "Dire";
-            }
-            if (iter == senate.end()) iter = senate.begin();
+        queue<unsigned> rad, dir;
+        unsigned n = 1;
+        for_each(senate.begin(), senate.end(), [&rad, &dir, &n](char ch) {
+            (ch == 'R') ? rad.push(n++) : dir.push(n++);
+        });
+        while (!rad.empty() && !dir.empty()) {
+            auto r = rad.front(), d = dir.front();
+            rad.pop(); dir.pop();
+            (r < d) ? rad.push(n++) : dir.push(n++);
         }
-        return "";
+        return (rad.empty()) ? "Dire" : "Radiant";
     }
 };
 // @lc code=end
