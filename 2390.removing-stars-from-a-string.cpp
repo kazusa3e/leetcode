@@ -8,6 +8,7 @@
 
 #include <string>
 #include <deque>
+#include <algorithm>
 
 using namespace std;
 
@@ -15,12 +16,10 @@ class Solution {
 public:
     string removeStars(string s) {
         deque<char> st;
-        for (auto ch : s) {
+        for_each(s.begin(), s.end(), [&st](char ch) {
             if (ch != '*') st.push_back(ch);
-            else {
-                if (!st.empty()) st.pop_back();
-            }
-        }
+            else { if (!st.empty()) st.pop_back(); }
+        });
         return { st.begin(), st.end() };
     }
 };
