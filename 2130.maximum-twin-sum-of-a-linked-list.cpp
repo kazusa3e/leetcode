@@ -27,9 +27,8 @@ public:
     int pairSum(ListNode* head) {
         vector<int> nums;
         for (auto iter = head; iter != nullptr; iter = iter->next) { nums.push_back(iter->val); }
-        vector<int> twin_sums;
-        transform(nums.begin(), nums.begin() + nums.size() / 2, nums.rbegin(), back_inserter(twin_sums), plus {});
-        return *max_element(twin_sums.begin(), twin_sums.end());
+        transform(nums.begin(), nums.begin() + nums.size() / 2, nums.rbegin(), nums.begin(), plus {});
+        return *max_element(nums.begin(), nums.end());
     }
 };
 // @lc code=end
