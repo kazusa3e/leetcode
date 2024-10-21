@@ -25,31 +25,11 @@ class Solution {
 public:
     bool hasPathSum(TreeNode* root, int targetSum) {
         if (root == nullptr) return false;
-        stack<TreeNode *> st;
-        stack<int> presum;
-        st.push(root);
-        presum.push(0);
-        while (!st.empty()) {
-            TreeNode *node = st.top(); st.pop();
-            int sum = presum.top(); presum.pop();
-            if (node != nullptr) {
-                if (node->right != nullptr) {
-                    st.push(node->right);
-                    presum.push(sum + node->val);
-                }
-                if (node->left != nullptr) {
-                    st.push(node->left);
-                    presum.push(sum + node->val);
-                }
-                st.push(node); st.push(nullptr); presum.push(sum);
-            } else {
-                node = st.top(); st.pop();
-                if (node->left == nullptr && node->right == nullptr) {
-                    if (sum + node->val == targetSum) return true;
-                }
-            }
+        if (root->left == nullptr && root->right == nullptr) {
+            return (targetSum == root->val);
         }
-        return false;
+        return hasPathSum(root->left, targetSum - root->val)
+            || hasPathSum(root->right, targetSum - root->val);
     }
 };
 // @lc code=end
