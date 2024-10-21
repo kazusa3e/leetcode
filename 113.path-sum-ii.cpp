@@ -20,30 +20,33 @@
 #include <vector>
 #include <numeric>
 #include <utility>
+#include <algorithm>
 
 using namespace std;
 
 class Solution {
 public:
     vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
-        vector<vector<int>> ret;
-        if (root == nullptr) return ret;
-        pathSum(root, targetSum, {}, move(ret));
-        return ret;
+        if (root == nullptr) return {};
+        return pathSum(root, targetSum, {});
     }
-    void pathSum(TreeNode *root, int targetSum, vector<int> path, vector<vector<int>> &&ret) {
-        path.push_back(root->val);
+
+    vector<vector<int>> pathSum(TreeNode *root, int targetSum, vector<int> prefix) {
+        prefix.push_back(root->val);
         if (root->left == nullptr && root->right == nullptr) {
-            if (accumulate(path.begin(), path.end(), 0) == targetSum) {
-                ret.push_back(path);
-            }
+            return (root->val == targetSum)
+                ? vector<vector<int>> { prefix }
+                : vector<vector<int>> {};
         }
+        vector<vector<int>> l, r;
         if (root->left != nullptr) {
-            pathSum(root->left, targetSum, path, move(ret));
+            l = pathSum(root->left, targetSum - root->val, prefix);
         }
         if (root->right != nullptr) {
-            pathSum(root->right, targetSum, path, move(ret));
+            r = pathSum(root->right, targetSum - root->val, prefix);
         }
+        move(r.begin(), r.end(), back_inserter(l));
+        return l;
     }
 };
 // @lc code=end
