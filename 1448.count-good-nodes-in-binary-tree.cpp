@@ -19,20 +19,40 @@
 
 #include <algorithm>
 #include <limits>
+#include <stack>
 
 using namespace std;
 
 class Solution {
 public:
     int goodNodes(TreeNode* root) {
-        return goodNodes(root, numeric_limits<int>::min());
-    }
-
-    int goodNodes(TreeNode *root, int limit) {
         if (root == nullptr) return 0;
-        int l = goodNodes(root->left, max(root->val, limit)),
-            r = goodNodes(root->right, max(root->val, limit));
-        return (root->val >= limit) ? 1 + l + r : l + r;
+        stack<TreeNode *> st; st.push(root);
+        stack<int> limits; limits.push(numeric_limits<int>::min());
+        unsigned cnt = 0;
+        while (!st.empty()) {
+            TreeNode *node = st.top(); st.pop();
+            int limit = limits.top(); limits.pop();
+            if (node != nullptr) {
+                if (node->left != nullptr) {
+                    st.push(node->left);
+                    limits.push(max(limit, node->val));
+                }
+                if (node->right != nullptr) {
+                    st.push(node->right);
+                    limits.push(max(limit, node->val));
+                }
+
+                st.push(node); st.push(nullptr);
+                limits.push(limit); limits.push(0);
+            } else {
+                node = st.top(); st.pop();
+                limit = limits.top(); limits.pop();
+                if (node->val >= limit) cnt += 1;
+
+            }
+        }
+        return cnt;
     }
 };
 // @lc code=end
