@@ -13,10 +13,7 @@ using namespace std;
 class Solution {
 public:
     int minFlips(int a, int b, int c) {
-        constexpr unsigned num_bits = 32;
-        // return ((a | b) ^ c) + (a & b & ((a | b) ^ c));
-        return bitset<num_bits> ((a | b) ^ c).count()
-            + bitset<num_bits> (a & b & (~c)).count();
+        return __popcount(a | b ^ c) + __popcount(a & b & (~c));
     }
 };
 // @lc code=end
