@@ -17,10 +17,7 @@ template <typename Iterator,
     typename = typename std::enable_if_t<
         std::is_convertible_v<decltype(std::declval<Comparator>()(
             std::declval<typename std::iterator_traits<Iterator>::value_type>(),
-            std::declval<typename std::iterator_traits<Iterator>::value_type>()
-        )), bool>
-    >
->
+            std::declval<typename std::iterator_traits<Iterator>::value_type>())), bool>>>
 void quick_sort(Iterator begin, Iterator end,
     Comparator comp = Comparator()) {
     if (begin >= end) return;
