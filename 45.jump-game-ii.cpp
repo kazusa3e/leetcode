@@ -15,14 +15,17 @@ using namespace std;
 class Solution {
 public:
     int jump(vector<int>& nums) {
-        vector<int> dp(nums.size(), numeric_limits<int>::max()); dp[dp.size() - 1] = 0;
-        for (int ix = dp.size() - 2; ix >= 0; --ix) {
-            dp[ix] = *min_element(
-                dp.begin() + ix + 1,
-                min(dp.begin() + ix + 1 + nums[ix], dp.end())
-            ) + 1;
+        if (nums.size() == 1) return true;
+        if (nums[0] == 0) return false;
+        unsigned curr = 0, steps = 0;
+        while (curr < nums.size() - 1) {
+            vector<pair<unsigned, unsigned>> tmp;
+            for (unsigned i = curr + 1; i != min((unsigned) nums.size() - 1, curr + nums[curr] + 1); ++i) {
+                tmp.push_back({i + nums[i], i});
+            }
+            curr = max_element(tmp.begin(), tmp.end())->second; steps += 1;
         }
-        return dp[0];
+        return steps;
     }
 };
 // @lc code=end
