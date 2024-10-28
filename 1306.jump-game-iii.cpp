@@ -18,15 +18,13 @@ public:
         queue<int> qu; qu.push(start);
         while (!qu.empty()) {
             auto curr = qu.front(); qu.pop();
+            if (arr[curr]) return true;
             if (curr - arr[curr] >= 0 && !visited[curr - arr[curr]]) {
                 qu.push(curr - arr[curr]); visited[curr - arr[curr]] = true;
             }
             if (curr + arr[curr] < arr.size() && !visited[curr + arr[curr]]) {
                 qu.push(curr + arr[curr]); visited[curr + arr[curr]] = true;
             }
-        }
-        for (unsigned ix = 0; ix != arr.size(); ++ix) {
-            if (arr[ix] == 0 && visited[ix]) return true;
         }
         return false;
     }
