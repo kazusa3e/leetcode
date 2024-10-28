@@ -25,8 +25,7 @@ public:
                 unsigned remove = dp[i - 1][j] + 1,
                     add = dp[i][j - 1] + 1,
                     replace = (word1[i - 1] == word2[j - 1]) ? dp[i - 1][j - 1] : dp[i - 1][j - 1] + 1;
-                vector<unsigned> tmp = { remove, add, replace };
-                dp[i][j] = *min_element(tmp.begin(), tmp.end());
+                dp[i][j] = min({remove, add, replace});
             }
         }
         return dp[word1.size()][word2.size()];
