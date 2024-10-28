@@ -7,30 +7,22 @@
 // @lc code=start
 
 #include <vector>
+#include <limits>
+#include <algorithm>
 
 using namespace std;
 
 class Solution {
 public:
     int jump(vector<int>& nums) {
-        int cover = 0;
-        int cnt = 0;
-        if (nums.size() == 1) return 0;
-        for (int ix = 0; ix <= cover; ) {
-            cover = max(cover, ix + nums[ix]);
-            if (cover >= nums.size() - 1) {
-                cnt += 1; break;
-            }
-            int m_cover = 0, m_idx = 0;
-            for (int i = ix + 1; i != min(ix + 1 + nums[ix], (int) nums.size()); ++i) {
-                if (nums[i] + i > m_cover) {
-                    m_cover = nums[i] + i;
-                    m_idx = i;
-                }
-            }
-            ix = m_idx; cnt += 1;
+        vector<int> dp(nums.size(), numeric_limits<int>::max()); dp[dp.size() - 1] = 0;
+        for (int ix = dp.size() - 2; ix >= 0; --ix) {
+            dp[ix] = *min_element(
+                dp.begin() + ix + 1,
+                min(dp.begin() + ix + 1 + nums[ix], dp.end())
+            ) + 1;
         }
-        return cnt;
+        return dp[0];
     }
 };
 // @lc code=end
