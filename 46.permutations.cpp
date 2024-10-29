@@ -11,28 +11,24 @@
 using namespace std;
 
 class Solution {
-private:
-    vector<int> nums_;
-    vector<int> bag_;
-    vector<vector<int>> results_;
-    void backtracking(vector<int> candidates) {
-        if (candidates.empty()) {
-            results_.push_back(bag_);
-            return;
-        }
-        for (auto iter = candidates.begin(); iter != candidates.end(); ++iter) {
-            bag_.push_back(*iter);
-            vector<int> c {candidates};
-            c.erase(c.begin() + distance(candidates.begin(), iter));
-            backtracking(c);
-            bag_.pop_back();
-        }
-    }
+public:
+    vector<vector<int>> results;
+
 public:
     vector<vector<int>> permute(vector<int>& nums) {
-        nums_ = nums;
-        backtracking(nums_);
-        return results_;
+        backtracking(0, std::move(nums));
+        return results;
+    }
+
+    void backtracking(unsigned begin, vector<int> &&nums) {
+        if (begin == nums.size()) {
+            results.push_back(nums); return;
+        }
+        for (unsigned i = begin; i != nums.size(); ++i) {
+            swap(nums[i], nums[begin]);
+            backtracking(begin + 1, std::move(nums));
+            swap(nums[i], nums[begin]);
+        }
     }
 };
 // @lc code=end
