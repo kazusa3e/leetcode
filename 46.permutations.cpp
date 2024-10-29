@@ -7,28 +7,18 @@
 // @lc code=start
 
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 class Solution {
 public:
-    vector<vector<int>> results;
-
-public:
     vector<vector<int>> permute(vector<int>& nums) {
-        backtracking(0, std::move(nums));
+        vector<vector<int>> results;
+        do {
+            results.push_back(nums);
+        } while (next_permutation(nums.begin(), nums.end()));
         return results;
-    }
-
-    void backtracking(unsigned begin, vector<int> &&nums) {
-        if (begin == nums.size()) {
-            results.push_back(nums); return;
-        }
-        for (unsigned i = begin; i != nums.size(); ++i) {
-            swap(nums[i], nums[begin]);
-            backtracking(begin + 1, std::move(nums));
-            swap(nums[i], nums[begin]);
-        }
     }
 };
 // @lc code=end
