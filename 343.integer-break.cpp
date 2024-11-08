@@ -7,19 +7,17 @@
 // @lc code=start
 
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 class Solution {
 public:
     int integerBreak(int n) {
-        vector<int> dp(59);
-        dp[1] = 1;
-        for (int i = 2; i <= 58; ++i) {
-            int m_max = 0;
-            for (int j = 1; j != i; ++j) {
-                m_max = max(m_max, max(j * (i - j), j * dp[i - j]));
-                dp[i] = m_max;
+        vector<int> dp(n + 1); dp[0] = 0; dp[1] = 0; dp[2] = 1;
+        for (int ix = 3; ix <= n; ++ix) {
+            for (int j = 2; j != ix; ++j) {
+                dp[ix] = max({dp[ix], j * (ix - j), j * dp[ix - j]});
             }
         }
         return dp[n];
