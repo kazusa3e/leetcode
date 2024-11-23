@@ -12,24 +12,28 @@
 using namespace std;
 
 class Solution {
+private:
+    vector<int> nums_;
+    int target_;
+    int num_methods {0};
+    int subsum {0};
 public:
     int findTargetSumWays(vector<int>& nums, int target) {
-        const unsigned sum = accumulate(nums.begin(), nums.end(), 0);
+        nums_ = nums;
+        const int sum = accumulate(nums.begin(), nums.end(), 0);
         if ((sum + target) % 2 == 1) return 0;
-        const unsigned l = (sum + target) / 2;
-        unsigned cnt {};
-        backtracking(nums, 0, 0, cnt, l);
-        return cnt;
+        target_ = (sum + target) / 2;
+
+        backtracking(nums_.begin());
+        return num_methods;
     }
 
-    void backtracking(const vector<int> &nums, unsigned start, unsigned subsum, unsigned &cnt, const unsigned target) {
-        if (subsum == target) {
-            cnt += 1;
-        }
-        for (unsigned idx = start; idx != nums.size(); ++idx) {
-            subsum += nums[idx];
-            backtracking(nums, idx + 1, subsum, cnt, target);
-            subsum -= nums[idx];
+    void backtracking(vector<int>::iterator begin) {
+        if (subsum == target_) num_methods += 1;
+        for (auto iter = begin; iter != nums_.end(); ++iter) {
+            subsum += *iter;
+            backtracking(iter + 1);
+            subsum -= *iter;
         }
     }
 };
