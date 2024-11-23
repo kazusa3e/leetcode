@@ -20,26 +20,15 @@ public:
         if ((sum + target) % 2 == 1) return 0;
         const int caps = (sum + target) / 2;
 
-        // [item, caps] => num_methods
-        vector<vector<unsigned>> dp(nums.size(), vector<unsigned>(caps + 1, 0));
+        vector<int> dp(caps + 1, 0); dp[0] = 1;
 
-        dp[0][0] = 1;
-        if (nums[0] <= caps) dp[0][nums[0]] = 1;
-        unsigned num_zeros = 0;
-        for (unsigned i = 0; i != nums.size(); ++i) {
-            if (nums[i] == 0) num_zeros += 1;
-            dp[i][0] = pow(2, num_zeros);
-        }
-
-        for (unsigned i = 1; i != nums.size(); ++i) {
-            for (unsigned j = 0; j != caps + 1; ++j) {
-                dp[i][j] = dp[i - 1][j];
-                if (j >= nums[i]) {
-                    dp[i][j] += dp[i - 1][j - nums[i]];
-                }
+        for (int i = 0; i != nums.size(); ++i) {
+            for (int j = caps; j >= nums[i]; --j) {
+                dp[j] += dp[j - nums[i]];
             }
         }
-        return dp.back().back();
+
+        return dp.back();
     }
 };
 // @lc code=end
