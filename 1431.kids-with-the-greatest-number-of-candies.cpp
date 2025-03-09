@@ -14,11 +14,11 @@ using namespace std;
 class Solution {
 public:
     vector<bool> kidsWithCandies(vector<int>& candies, int extraCandies) {
-        auto m_max = max_element(candies.begin(), candies.end());
         vector<bool> ret(candies.size(), false);
-        for (int ix = 0; ix != candies.size(); ++ix) {
-            if (candies[ix] + extraCandies >= *m_max) ret[ix] = true;
-        }
+        const auto max_el = *max_element(candies.cbegin(), candies.cend());
+        transform(candies.cbegin(), candies.cend(), ret.begin(), [&](const auto el) {
+            return el + extraCandies >= max_el;
+        });
         return ret;
     }
 };

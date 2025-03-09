@@ -15,21 +15,17 @@ class Solution {
 public:
     int maxOperations(vector<int>& nums, int k) {
         sort(nums.begin(), nums.end());
-        unsigned num_opers = 0;
-        auto l = nums.begin(), r = nums.end() - 1;
+        auto l = nums.begin();
+        auto r = upper_bound(nums.crbegin(), nums.crend(), k, greater {}).base() - 1;
+        int num_operator = 0;
         while (l < r) {
-            if (*l + *r == k) {
-                ++num_opers; ++l; --r;
-                continue;
-            }
-            if (*l + *r < k) {
-                ++l; continue;
-            }
-            if (*l + *r > k) {
-                --r; continue;
-            }
+            auto s = *l + *r;
+            if (s == k) {
+                ++l; --r; num_operator += 1;
+            } else if (s < k) ++l;
+            else --r;
         }
-        return num_opers;
+        return num_operator;
     }
 };
 // @lc code=end

@@ -14,15 +14,13 @@ using namespace std;
 class Solution {
 public:
     double findMaxAverage(vector<int>& nums, int k) {
-        int win = accumulate(nums.begin(), nums.begin() + k, 0);
-        int max_win = win;
-        auto l = nums.begin(), r = nums.begin() + k;
-        while (r <= nums.end() - 1) {
-            win -= *l; win += *r;
-            max_win = max(win, max_win);
-            ++l; ++r;
+        auto subsum = accumulate(nums.cbegin(), nums.cbegin() + k, 0);
+        auto max_subsum = subsum;
+        for (auto l = nums.cbegin(), r = nums.cbegin() + k; r != nums.cend(); ++l, ++r) {
+            subsum = subsum - *l + *r;
+            max_subsum = max(max_subsum, subsum);
         }
-        return (double) max_win / k;
+        return (double) max_subsum / k;
     }
 };
 // @lc code=end

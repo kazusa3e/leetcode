@@ -13,23 +13,15 @@ using namespace std;
 class Solution {
 public:
     string mergeAlternately(string word1, string word2) {
-        string ret(word1.size() + word2.size(), '\0');
-        bool turn = false;
-        unsigned sz = 0, idx1 = 0, idx2 = 0;
-        while (idx1 != word1.size() && idx2 != word2.size()) {
-            if (!turn) {
-                ret[sz++] = word1[idx1++];
-            } else {
-                ret[sz++] = word2[idx2++];
-            }
-            turn = !turn;
+        string ret(word1.size() + word2.size(), 0);
+        auto dst = ret.begin();
+        auto iter1 = word1.cbegin(), iter2 = word2.cbegin();
+        while (iter1 != word1.cend() && iter2 != word2.cend()) {
+            *(dst++) = *(iter1++);
+            *(dst++) = *(iter2++);
         }
-        while (idx1 != word1.size()) {
-            ret[sz++] = word1[idx1++];
-        }
-        while (idx2 != word2.size()) {
-            ret[sz++] = word2[idx2++];
-        }
+        while (iter1 != word1.cend()) *(dst++) = *(iter1++);
+        while (iter2 != word2.cend()) *(dst++) = *(iter2++);
         return ret;
     }
 };
