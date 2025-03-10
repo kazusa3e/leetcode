@@ -15,8 +15,10 @@ using namespace std;
 class Solution {
 public:
     int findGCD(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        return gcd(nums.front(), nums.back());
+        return gcd(
+            *min_element(nums.cbegin(), nums.cend()),
+            *max_element(nums.cbegin(), nums.cend())
+        );
     }
 };
 // @lc code=end
