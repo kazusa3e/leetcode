@@ -5,15 +5,14 @@
  */
 
 // @lc code=start
+#include <bitset>
+
+using namespace std;
+
 class Solution {
 public:
     int hammingWeight(int n) {
-        unsigned cnt = 0;
-        while (n != 0) {
-            if (n % 2 == 1) ++cnt;
-            n /= 2;
-        }
-        return cnt;
+        return (bitset<sizeof(int) * 8>(n)).count();
     }
 };
 // @lc code=end
