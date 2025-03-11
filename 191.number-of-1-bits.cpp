@@ -12,7 +12,7 @@ using namespace std;
 class Solution {
 public:
     int hammingWeight(int n) {
-        return (bitset<sizeof(int) * 8>(n)).count();
+        return __popcount(n);
     }
 };
 // @lc code=end
