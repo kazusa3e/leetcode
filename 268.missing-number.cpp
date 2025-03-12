@@ -5,7 +5,6 @@
  */
 
 // @lc code=start
-#include <functional>
 #include <numeric>
 #include <vector>
 
@@ -14,9 +13,8 @@ using namespace std;
 class Solution {
 public:
     int missingNumber(vector<int>& nums) {
-        auto ans = accumulate(nums.cbegin(), nums.cend(), 0, bit_xor {});
-        for (auto ix = 0ull; ix <= nums.size(); ++ix) ans ^= ix;
-        return ans;
+        auto sum = accumulate(nums.cbegin(), nums.cend(), 0);
+        return nums.size() * (nums.size() + 1) / 2 - sum;
     }
 };
 // @lc code=end
