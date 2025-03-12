@@ -5,8 +5,8 @@
  */
 
 // @lc code=start
-#include <algorithm>
-#include <iterator>
+#include <functional>
+#include <numeric>
 #include <vector>
 
 using namespace std;
@@ -14,9 +14,9 @@ using namespace std;
 class Solution {
 public:
     int missingNumber(vector<int>& nums) {
-        vector<bool> bitmap(nums.size(), false);
-        for (const auto &el : nums) bitmap[el] = true;
-        return distance(bitmap.cbegin(), find(bitmap.cbegin(), bitmap.cend(), false));
+        auto ans = accumulate(nums.cbegin(), nums.cend(), 0, bit_xor {});
+        for (auto ix = 0ull; ix <= nums.size(); ++ix) ans ^= ix;
+        return ans;
     }
 };
 // @lc code=end
