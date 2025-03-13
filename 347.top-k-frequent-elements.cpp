@@ -5,6 +5,8 @@
  */
 
 // @lc code=start
+#include <algorithm>
+#include <iterator>
 #include <queue>
 #include <vector>
 #include <unordered_map>
@@ -16,30 +18,18 @@ public:
 
     using element_type = pair<int, unsigned>;
 
-    template <typename Comparator>
-    struct frequent_comparator {
-        bool operator()(const element_type &lhs, const element_type &rhs) const {
-            return Comparator {} (lhs.second, rhs.second);
-        }
-    };
-
     vector<int> topKFrequent(vector<int>& nums, int k) {
         unordered_map<int, unsigned> umap;
         for (const auto &el : nums) ++umap[el];
-        priority_queue<element_type, vector<element_type>, frequent_comparator<greater<>>> pq;
-        for (const auto &[val, freq] : umap) {
-            if (pq.size() != k) {
-                pq.push(make_pair(val, freq)); continue;
-            }
-            if (freq > pq.top().second) {
-                if (pq.size() == k) pq.pop();
-                pq.push(make_pair(val, freq));
-            }
-        }
+        auto freq_cmp = [](const element_type &lhs, const element_type &rhs) -> bool {
+            return lhs.second > rhs.second;
+        };
+        vector<element_type> vec { umap.cbegin(), umap.cend() };
+        partial_sort(vec.begin(), vec.begin() + k, vec.end(), freq_cmp);
         vector<int> ret;
-        while (!pq.empty()) {
-            ret.push_back(pq.top().first); pq.pop();
-        }
+        transform(vec.cbegin(), vec.cbegin() + k, back_inserter(ret), [](const auto &e) {
+            return e.first;
+        });
         return ret;
     }
 };
