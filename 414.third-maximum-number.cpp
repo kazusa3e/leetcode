@@ -13,10 +13,14 @@ using namespace std;
 class Solution {
 public:
     int thirdMax(vector<int>& nums) {
-        set<int, greater<>> s { nums.begin(), nums.end() };
-        auto pos = s.cbegin();
-        if (s.size() < 3) return *pos;
-        ++pos; ++pos; return *pos;
+        set<int, less<>> s;
+        for (const auto &el : nums) {
+            if (auto pos = s.find(el); pos != s.cend()) continue;
+            if (s.size() < 3) { s.insert(el); continue; }
+            if (el < *s.cbegin()) continue;
+            s.erase(s.begin()); s.insert(el);
+        }
+        return (s.size() >= 3) ? *s.cbegin() : *s.crbegin();
     }
 };
 // @lc code=end
