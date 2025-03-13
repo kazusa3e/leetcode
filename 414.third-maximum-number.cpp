@@ -5,7 +5,7 @@
  */
 
 // @lc code=start
-#include <algorithm>
+#include <set>
 #include <vector>
 
 using namespace std;
@@ -13,10 +13,10 @@ using namespace std;
 class Solution {
 public:
     int thirdMax(vector<int>& nums) {
-        sort(nums.begin(), nums.end(), greater {});
-        const auto pos = unique(nums.begin(), nums.end());
-        if (distance(nums.begin(), pos) < 3) return nums.front();
-        return nums[2];
+        set<int, greater<>> s { nums.begin(), nums.end() };
+        auto pos = s.cbegin();
+        if (s.size() < 3) return *pos;
+        ++pos; ++pos; return *pos;
     }
 };
 // @lc code=end
