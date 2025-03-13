@@ -5,7 +5,7 @@
  */
 
 // @lc code=start
-#include <algorithm>
+#include <cstdlib>
 #include <vector>
 
 using namespace std;
@@ -14,12 +14,13 @@ class Solution {
 public:
     vector<int> findDuplicates(vector<int>& nums) {
         if (nums.size() == 1) return {};
-        sort(nums.begin(), nums.end());
         vector<int> ret;
-        for (auto ix = 1ull; ix != nums.size(); ++ix) {
-            if (nums[ix] == nums[ix - 1]) {
-                if (ret.empty()) ret.push_back(nums[ix]);
-                else if (nums[ix] != ret.back()) ret.push_back(nums[ix]);
+        for (auto ix = 0ull; ix != nums.size(); ++ix) {
+            auto key = abs(nums[ix]) - 1;
+            if (nums[key] < 0) {
+                ret.push_back(abs(nums[ix]));
+            } else {
+                nums[key] = -nums[key];
             }
         }
         return ret;
