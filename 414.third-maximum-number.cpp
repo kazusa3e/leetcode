@@ -5,7 +5,7 @@
  */
 
 // @lc code=start
-#include <set>
+#include <limits>
 #include <vector>
 
 using namespace std;
@@ -13,14 +13,20 @@ using namespace std;
 class Solution {
 public:
     int thirdMax(vector<int>& nums) {
-        set<int, less<>> s;
+        auto m1 = numeric_limits<long>::min(),
+            m2 = numeric_limits<long>::min(),
+            m3 = numeric_limits<long>::min();
         for (const auto &el : nums) {
-            if (auto pos = s.find(el); pos != s.cend()) continue;
-            if (s.size() < 3) { s.insert(el); continue; }
-            if (el < *s.cbegin()) continue;
-            s.erase(s.begin()); s.insert(el);
+            if (el == m1 || el == m2 || el == m3) continue;
+            if (el > m1) {
+                m3 = m2; m2 = m1; m1 = el;
+            } else if (el > m2) {
+                m3 = m2; m2 = el;
+            } else if (el > m3) {
+                m3 = el;
+            }
         }
-        return (s.size() >= 3) ? *s.cbegin() : *s.crbegin();
+        return (m3 == numeric_limits<long>::min()) ? m1 : m3;
     }
 };
 // @lc code=end
