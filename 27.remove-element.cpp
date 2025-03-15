@@ -6,25 +6,19 @@
 
 // @lc code=start
 
+#include <algorithm>
 #include <vector>
+
 using namespace std;
 
 class Solution {
 public:
     int removeElement(vector<int>& nums, int val) {
-        if (nums.size() == 0) {
-            return 0;
-        }
-        auto rptr = nums.begin(), wptr = nums.begin();
-        while (rptr != nums.end()) {
-            if (*rptr != val) {
-                *wptr = *rptr;
-                wptr += 1;
-            }
-            rptr += 1;
-        }
-        nums.erase(wptr, nums.end());
-        return wptr - nums.begin();
+        const auto pos = copy_if(nums.begin(), nums.end(), nums.begin(), [&val](const auto &el) {
+            return el != val;
+        });
+        nums.erase(pos, nums.end());
+        return nums.size();
     }
 };
 // @lc code=end
