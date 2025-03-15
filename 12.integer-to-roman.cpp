@@ -5,6 +5,7 @@
  */
 
 // @lc code=start
+#include <vector>
 #include <string>
 
 using namespace std;
@@ -13,50 +14,19 @@ class Solution {
 public:
     string intToRoman(int num) {
         string ret;
-        while (num != 0) {
-            if (num >= 1000) {
-                ret += string (num / 1000, 'M');
-                num %= 1000; continue;
+        vector<pair<unsigned, string>> umap = {
+            { 1000, "M" }, { 900, "CM" },
+            { 500, "D" }, { 400, "CD" },
+            { 100, "C" }, { 90, "XC" },
+            { 50, "L" }, { 40, "XL" },
+            { 10, "X" }, { 9, "IX" },
+            { 5, "V" }, { 4, "IV" },
+            { 1, "I" }
+        };
+        for (const auto &[bound, s] : umap) {
+            while (num >= bound) {
+                ret += s; num -= bound;
             }
-            if (num >= 900) {
-                ret += "CM"; num -= 900; continue;
-            }
-            if (num >= 500) {
-                ret += string(num / 500, 'D');
-                num %= 500; continue;
-            }
-            if (num >= 400) {
-                ret += "CD"; num -= 400; continue;
-            }
-            if (num >= 100) {
-                ret += string(num / 100, 'C');
-                num %= 100; continue;
-            }
-            if (num >= 90) {
-                ret += "XC"; num -= 90; continue;
-            }
-            if (num >= 50) {
-                ret += string(num / 50, 'L');
-                num %= 50; continue;
-            }
-            if (num >= 40) {
-                ret += "XL"; num -= 40; continue;
-            }
-            if (num >= 10) {
-                ret += string(num / 10, 'X');
-                num %= 10; continue;
-            }
-            if (num >= 9) {
-                ret += "IX"; num -= 9; continue;
-            }
-            if (num >= 5) {
-                ret += string(num / 5, 'V');
-                num %= 5; continue;
-            }
-            if (num >= 4) {
-                ret += "IV"; num -= 4; continue;
-            }
-            ret += string(num, 'I'); num = 0;
         }
         return ret;
     }
